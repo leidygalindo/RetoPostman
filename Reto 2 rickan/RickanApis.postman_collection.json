@@ -1,0 +1,387 @@
+{
+	"info": {
+		"_postman_id": "2376ab24-840c-4a16-b1f8-eb8a493247d9",
+		"name": "RickanApis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24796585"
+	},
+	"item": [
+		{
+			"name": "Obtener lista de Todos los personaje",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validar cuerpo del texto incluya Morty Smith\", function(){\r",
+							"pm.expect(pm.response.text()).to.include(\"Morty Smith\")\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Validar un personaje\",()=>{\r",
+							"    var pers = jsonData.results.find(x => x.id ==3)\r",
+							"    pm.expect(pers.status).to.equal(\"Alive\");\r",
+							"    console.log(pers)\r",
+							"})\r",
+							"\r",
+							"\r",
+							"var schema = {\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"properties\":\r",
+							"        {\r",
+							"        \"id\": {\"type\":\"number\"},\r",
+							"        \"name\": {\"type\":\"string\"},\r",
+							"        \"status\": {\"type\":\"string\"},\r",
+							"        \"species\":{\"type\":\"string\"},\r",
+							"        \"type\": {\"type\":\"string\"},\r",
+							"        \"gender\": {\"type\":\"string\"},\r",
+							"        \"origin\": {\"type\":\"string\"},\r",
+							"        \"location\": {\"type\":\"string\"},\r",
+							"        \"image\": {\"type\":\"string\"},\r",
+							"        \"episode\": {\"type\":\"string\"},\r",
+							"        \"url\": {\"type\":\"string\"},\r",
+							"        \"created\": {\"type\":\"string\"},\r",
+							"        }\r",
+							"    }\r",
+							"};\r",
+							"pm.test(\"Validar el esquema\",()=>{\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El codigo de respuesta es: 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{urll_Base}}{{Caracter}}",
+					"host": [
+						"{{urll_Base}}{{Caracter}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener lista de personajes por pagina",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Validar un personaje de la pagina\",()=>{\r",
+							"    var pers = jsonData.results.find(x => x.id ==81)\r",
+							"    pm.expect(pers.species).to.equal(\"Animal\");\r",
+							"    console.log(pers)\r",
+							"})\r",
+							"\r",
+							"\r",
+							"pm.test(\"Mensaje de repuesta 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var MyTest={\r",
+							"    \"name\": \"Cronenberg Rick\",\r",
+							"    \"status\": \"unknown\",\r",
+							"    \"species\": \"Cronenberg\",\r",
+							"    \"gender\": \"Male\"\r",
+							"};\r",
+							"\r",
+							"pm.test(\"Personaje con las caracteristicas solicitadas\",()=>{\r",
+							"    var pers = pm.response.json();\r",
+							"    var resul = pers.results.find(x => x.id ==82)\r",
+							"    console.log(resul)\r",
+							"    pm.expect(resul).to.include(MyTest);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{urll_Base}}{{Caracter}}?page=5",
+					"host": [
+						"{{urll_Base}}{{Caracter}}"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener Personaje por ID exitoso",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"id es numero\", function() \r",
+							"{ pm.expect(jsonData.id).to.be.a('Number');\r",
+							"});\r",
+							"pm.test(\"name es string\", function() \r",
+							"{ pm.expect(jsonData.name).to.be.a('string');\r",
+							"});\r",
+							"pm.test(\"status es string\", function() \r",
+							"{ pm.expect(jsonData.status).to.be.a('string');\r",
+							"});\r",
+							"pm.test(\"species es string y Human\", function() \r",
+							"{ pm.expect(jsonData.species).to.be.a('string').and.to.be.eql(\"Human\");\r",
+							"});\r",
+							"pm.test(\"type es string\", function() \r",
+							"{ pm.expect(jsonData.type).to.be.a('string');\r",
+							"});\r",
+							"pm.test(\"gender es string\", function() \r",
+							"{ pm.expect(jsonData.gender).to.be.a('string');\r",
+							"});\r",
+							"pm.test(\" Origin es objeto\", function() \r",
+							"{ pm.expect(jsonData.origin).to.be.a('object');\r",
+							"});\r",
+							"pm.test(\" location es objeto\", function() \r",
+							"{ pm.expect(jsonData.location).to.be.a('object');\r",
+							"});\r",
+							"pm.test(\" image es string\", function() \r",
+							"{ pm.expect(jsonData.image).to.be.a('string');\r",
+							"});\r",
+							"pm.test(\" episode es array\", function() \r",
+							"{ pm.expect(jsonData.episode).to.be.a('array');\r",
+							"});\r",
+							"pm.test(\" url es string\", function() \r",
+							"{ pm.expect(jsonData.url).to.be.a('string');\r",
+							"});\r",
+							"pm.test(\" created es string\", function() \r",
+							"{ pm.expect(jsonData.created).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validar especie humana \",()=>{\r",
+							"    pm.expect(jsonData.species).to.equal(\"Human\");\r",
+							"    console.log(jsonData)\r",
+							"})\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validar un origen personaje : unknown\",()=>{\r",
+							"    var Origen = jsonData.origin\r",
+							"    pm.expect(Origen.name).to.equal(\"unknown\");\r",
+							"    console.log(Origen)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Status mensaje es 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"validando propiedades que no debe tener el objeto\", function () {\r",
+							"    var Data = pm.response.json();\r",
+							"pm.expect(Data).to.not.have.any.keys('idetificacion','nombre');\r",
+							" });\r",
+							"\r",
+							"pm.test(\"validando propiedades id del objeto\", function () {\r",
+							"    var Data = pm.response.json();\r",
+							"pm.expect(Data).to.have.any.keys('id','nombre');\r",
+							" });\r",
+							"\r",
+							"\r",
+							"pm.test(\"validando elemento en el array episodio\", function () {\r",
+							"      var Data = pm.response.json();\r",
+							"      var episodio = jsonData.episode[0];\r",
+							"       console.log(episodio)\r",
+							"pm.expect(episodio).to.equal(\"https://rickandmortyapi.com/api/episode/10\");\r",
+							" });\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{urll_Base}}{{Caracter}}/18",
+					"host": [
+						"{{urll_Base}}{{Caracter}}"
+					],
+					"path": [
+						"18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener información varios personajes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"\r",
+							"pm.test(\"personaje con especie Humanoid\",()=>{\r",
+							"    var pers = jsonData.find(x => x.id ==22)\r",
+							"    pm.expect(pers.species).to.eqls(\"Humanoid\").and.to.be.a('string');\r",
+							"})\r",
+							"\r",
+							"pm.test(\"personajes sin tipe null\",()=>{\r",
+							"var perspn = jsonData.find(x => x.id ==1)\r",
+							"    pm.expect(perspn.type).to.be.a(\"string\")\r",
+							"       console.log(perspn)\r",
+							"})\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validar string url no es null\",()=>{\r",
+							"    var perspn = jsonData.find(x => x.id ==22)\r",
+							"    var Origen = perspn.origin\r",
+							"    pm.expect(Origen.url).to.be.a(\"string\")\r",
+							"    console.log(Origen)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{urll_Base}}{{Caracter}}/1,22,37",
+					"host": [
+						"{{urll_Base}}{{Caracter}}"
+					],
+					"path": [
+						"1,22,37"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener informacion personaes x filtros",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urll_Base}}{{Caracter}}/?name=rick&status=alive",
+					"host": [
+						"{{urll_Base}}{{Caracter}}"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "rick"
+						},
+						{
+							"key": "status",
+							"value": "alive"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener lista de personajes No exitosa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test (\"Validar arreglo vacio OK\", function(){\r",
+							"pm.expect([]).to.be.empty;\r",
+							"pm.expect('').to.be.empty;\r",
+							"});\r",
+							"\r",
+							"pm.test (\"Validar tiempo OK\", function(){\r",
+							"pm.expect(pm.response.responseTime).to.be.below(300);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{urll_Base}}{{Caracter}}/111175,75252,75275",
+					"host": [
+						"{{urll_Base}}{{Caracter}}"
+					],
+					"path": [
+						"111175,75252,75275"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

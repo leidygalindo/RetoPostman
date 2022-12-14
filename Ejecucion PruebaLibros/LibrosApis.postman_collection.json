@@ -1,0 +1,679 @@
+{
+	"info": {
+		"_postman_id": "2fed6602-a6c6-438a-b1be-ea7edc436b14",
+		"name": "LibrosApis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24796585"
+	},
+	"item": [
+		{
+			"name": "Obtener Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"El codigo de respuesta es: 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validar mensaje de repuesta status ok\", function(){\r",
+							"pm.expect(pm.response.text()).to.include(\"OK\")\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Url_Base}}{{Status}}",
+					"host": [
+						"{{Url_Base}}{{Status}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todos los libros exitosamente",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"El codigo de respuesta es: 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"console.log(response)\r",
+							"const availableBooks = response.filter((book) => book.available === true);\r",
+							"console.log(availableBooks);\r",
+							"\r",
+							"const book = availableBooks[0];\r",
+							"console.log(book);\r",
+							"pm.test('Reserva libros disponibles', ()=> {\r",
+							"    pm.expect(book.available).to.eql(true)\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Url_Base}}{{Books}}",
+					"host": [
+						"{{Url_Base}}{{Books}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener libro por ID exitosa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"El codigo de respuesta es: 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validar Nombre del libro 5 Untamed\", function(){\r",
+							"pm.expect(pm.response.text()).to.include(\"Untamed\")\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Url_Base}}{{Books}}/5",
+					"host": [
+						"{{Url_Base}}{{Books}}"
+					],
+					"path": [
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener libro por ID No exitosa Numero",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"El codigo de respuesta es: 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validar Mensaje de Respuesta No Book\", function(){\r",
+							"pm.expect(pm.response.text()).to.include(\"No book with id\")\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Url_Base}}{{Books}}/9",
+					"host": [
+						"{{Url_Base}}{{Books}}"
+					],
+					"path": [
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener libro por ID No exitosa Letra",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"El codigo de respuesta es: 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validar Mensaje de Respuesta No Book\", function(){\r",
+							"pm.expect(pm.response.text()).to.include(\"No book with id NaN\")\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Url_Base}}{{Books}}/PP",
+					"host": [
+						"{{Url_Base}}{{Books}}"
+					],
+					"path": [
+						"PP"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar cliente exitoso",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"user\",pm.variables.replaceIn(\"{{$randomFirstName}}\"))\r",
+							"pm.environment.set(\"email\",pm.variables.replaceIn(\"{{$randomEmail}}\"))"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response =pm.response.json();\r",
+							"var tokenObtenido = response.accessToken\r",
+							"console.log(tokenObtenido)\r",
+							"\r",
+							"pm.environment.set(\"token\",tokenObtenido );\r",
+							"\r",
+							"pm.test(\"El codigo de respuesta es: 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var schema =\r",
+							" {\r",
+							"        \"properties\":\r",
+							"        {\r",
+							"        \"accessToken\": {\"type\":\"string\"},\r",
+							"        }\r",
+							"};\r",
+							"pm.test(\"Validar el esquema\",()=>{\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"clientName\": \"{{user}}\",\r\n   \"clientEmail\": \"{{email}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Url_Base}}{{Clients}}",
+					"host": [
+						"{{Url_Base}}{{Clients}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar una Orden libro No disponible",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.environment.set(\"name\",pm.variables.replaceIn(\"{{$randomFirstName}}\"))"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response =pm.response.json();\r",
+							"var id_Orden = response.orderId\r",
+							"console.log(id_Orden)\r",
+							"pm.environment.set(\"id_Orden\", id_Orden);\r",
+							"\r",
+							"pm.test(\"El codigo de respuesta es: 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validar mensaje de repuesta libro No dispoble\", function(){\r",
+							"pm.expect(pm.response.text()).to.include(\"This book is not in stock\")\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookId\": \"2\",\r\n   \"customerName\": \"{{name}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Url_Base}}{{Orders}}",
+					"host": [
+						"{{Url_Base}}{{Orders}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar una Orden libro No existente",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"name\",pm.variables.replaceIn(\"{{$randomFirstName}}\"))\r",
+							"pm.environment.set(\"entero\",pm.variables.replaceIn(\"{{$randomInt}}\"))\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validar mensaje de repuesta libro No existente\", function(){\r",
+							"pm.expect(pm.response.text()).to.include(\"Invalid or missing bookId\")\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"El codigo de respuesta es: 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookId\": \"{{entero}}\",\r\n   \"customerName\": \"{{name}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Url_Base}}{{Orders}}",
+					"host": [
+						"{{Url_Base}}{{Orders}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar una Orden libro Exitosa",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"name\",pm.variables.replaceIn(\"{{$randomFirstName}}\"))"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response =pm.response.json();\r",
+							"var id_Orden = response.orderId\r",
+							"console.log(id_Orden)\r",
+							"pm.environment.set(\"id_Orden\", id_Orden);\r",
+							"\r",
+							"pm.test(\"El codigo de respuesta es: 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var schema =\r",
+							" {\r",
+							"        \"properties\":\r",
+							"        {\r",
+							"        \"created\": {\"type\":\"boolean\"},\r",
+							"        \"orderId\": {\"type\":\"string\"},\r",
+							"        }\r",
+							"};\r",
+							"pm.test(\"Validar el esquema\",()=>{\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookId\": \"3\",\r\n   \"customerName\": \"{{name}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Url_Base}}{{Orders}}",
+					"host": [
+						"{{Url_Base}}{{Orders}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todas las Ordenes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var schema = {\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"properties\":\r",
+							"        {\r",
+							"        \"id\": {\"type\":\"string\"},\r",
+							"        \"bookId\":{\"type\":\"number\"},\r",
+							"        \"customerName\":{\"type\":\"string\"},\r",
+							"        \"createdBy\": {\"type\":\"string\"},\r",
+							"        \"quantity\": {\"type\":\"number\"},\r",
+							"        \"timestamp\": {\"type\":\"number\"},\r",
+							"        }\r",
+							"    }\r",
+							"};\r",
+							"pm.test(\"Validar el esquema\",()=>{\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El codigo de respuesta es: 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Url_Base}}{{Orders}}",
+					"host": [
+						"{{Url_Base}}{{Orders}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener una orden por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"El codigo de respuesta es: 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"properties\":\r",
+							"        {\r",
+							"        \"id\": {\"type\":\"string\"},\r",
+							"        \"bookId\":{\"type\":\"number\"},\r",
+							"        \"customerName\":{\"type\":\"string\"},\r",
+							"        \"createdBy\": {\"type\":\"string\"},\r",
+							"        \"quantity\": {\"type\":\"number\"},\r",
+							"        \"timestamp\": {\"type\":\"number\"},\r",
+							"        }\r",
+							"    }\r",
+							"};\r",
+							"pm.test(\"Validar el esquema\",()=>{\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Url_Base}}{{Orders}}/{{id_Orden}}",
+					"host": [
+						"{{Url_Base}}{{Orders}}"
+					],
+					"path": [
+						"{{id_Orden}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar una orden por ID Exitosa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"El codigo de respuesta es: 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"customerName\": \"LucianaBermeoGalindo\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Url_Base}}{{Orders}}/{{id_Orden}}",
+					"host": [
+						"{{Url_Base}}{{Orders}}"
+					],
+					"path": [
+						"{{id_Orden}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar una orden por ID Exitosa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"El codigo de respuesta es: 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{Url_Base}}{{Orders}}/{{id_Orden}}",
+					"host": [
+						"{{Url_Base}}{{Orders}}"
+					],
+					"path": [
+						"{{id_Orden}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
