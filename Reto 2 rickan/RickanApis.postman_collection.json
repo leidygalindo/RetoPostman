@@ -255,7 +255,12 @@
 							"pm.test(\"personajes sin tipe null\",()=>{\r",
 							"var perspn = jsonData.find(x => x.id ==1)\r",
 							"    pm.expect(perspn.type).to.be.a(\"string\")\r",
-							"       console.log(perspn)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"gender es string\",()=>{\r",
+							"var pers = jsonData.find(x => x.id ==22)\r",
+							"    pm.expect(pers.gender).to.be.equal(\"Male\").and.to.be.a('string');\r",
+							"       console.log(pers)\r",
 							"})\r",
 							"\r",
 							"\r",
@@ -263,7 +268,6 @@
 							"    var perspn = jsonData.find(x => x.id ==22)\r",
 							"    var Origen = perspn.origin\r",
 							"    pm.expect(Origen.url).to.be.a(\"string\")\r",
-							"    console.log(Origen)\r",
 							"})"
 						],
 						"type": "text/javascript"
